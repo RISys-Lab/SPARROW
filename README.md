@@ -135,7 +135,7 @@ pip install flash-attn --no-build-isolation
 
 ### Stage 1: Detection Pretraining
 
-For detailed instructions on setting up and running the initial detection pretraining phase, please refer to **[`README_STAGE1.md`](https://www.google.com/search?q=./README_STAGE1.md)**.
+For detailed instructions on setting up and running the initial detection pretraining phase, please refer to **[`README_STAGE1.md`](./README_STAGE1.md)**.
 
 *(Further training instructions and stages will be released soon)*
 
