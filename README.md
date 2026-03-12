@@ -1,5 +1,5 @@
 <div align="center">
-<h1> SPARROW<img src='assets/sparrow.png' align="center" width="5%">: Learning Spatial Precision and Temporal Referential Consistency in Pixel-Grounded Video MLLMs (CVPR 2026) </h1>
+<h1> SPARROW<img src='pages/static/sparrow.png' align="center" width="5%">: Learning Spatial Precision and Temporal Referential Consistency in Pixel-Grounded Video MLLMs (CVPR 2026) </h1>
 
 > [**SPARROW**](https://arxiv.org/abs/2404.13013)
 > 

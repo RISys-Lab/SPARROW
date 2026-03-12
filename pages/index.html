@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPARROW: Learning Spatial Precision and Temporal Referential Consistency in Pixel-Grounded Video MLLMs
+    </title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #fafafa;
+            color: #0f172a;
+        }
+
+        .bg-grid-pattern {
+            background-image: radial-gradient(#e2e8f0 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        }
+
+        .text-justify-custom {
+            text-align: justify;
+            text-justify: inter-word;
+        }
+
+        .code-block {
+            background-color: #0f172a;
+            color: #e2e8f0;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        }
+
+        /* Animation delays */
+        .delay-100 {
+            animation-delay: 100ms;
+        }
+
+        .delay-200 {
+            animation-delay: 200ms;
+        }
+
+        .delay-300 {
+            animation-delay: 300ms;
+        }
+    </style>
+</head>
+
+<body class="antialiased selection:bg-blue-200 selection:text-blue-900">
+
+    <!-- Hero Section -->
+    <div class="relative overflow-hidden bg-slate-50 border-b border-slate-200 pb-16">
+        <div class="absolute inset-0 bg-grid-pattern opacity-50"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent to-slate-50"></div>
+
+        <header
+            class="relative pt-20 pb-8 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto text-center opacity-0 animate-fade-in-up">
+            <div
+                class="inline-flex items-center rounded-full px-3 py-1 text-sm font-semibold text-blue-600 bg-blue-100 ring-1 ring-inset ring-blue-600/20 mb-6">
+                CVPR 2026
+            </div>
+
+            <h1
+                class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 mb-6 leading-[1.15]">
+                <span
+                    class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 align-middle">SPARROW</span><img
+                    src="../assets/sparrow.png" alt="SPARROW"
+                    class="inline-block h-[1.2em] w-auto mx-1 align-middle pb-1"><span
+                    class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 align-middle">:</span><br>
+                <span class="text-3xl sm:text-4xl lg:text-5xl">Learning Spatial Precision and Temporal Referential
+                    Consistency in Pixel-Grounded Video MLLMS</span>
+            </h1>
+
+            <!-- Authors -->
+            <div
+                class="flex flex-wrap justify-center gap-x-6 gap-y-3 text-lg font-medium text-slate-700 mb-6 max-w-4xl mx-auto">
+                <a href="#" class="hover:text-blue-600 transition-colors duration-200">Mohamad Alansari</a>
+                <a href="#" class="hover:text-blue-600 transition-colors duration-200">Naufal Suryanto</a>
+                <a href="#" class="hover:text-blue-600 transition-colors duration-200">Divya Velayudhan</a>
+                <a href="#" class="hover:text-blue-600 transition-colors duration-200">Sajid Javed</a>
+                <a href="#" class="hover:text-blue-600 transition-colors duration-200">Naoufel Werghi</a>
+                <a href="#" class="hover:text-blue-600 transition-colors duration-200">Muzammal Naseer</a>
+            </div>
+
+            <!-- Affiliation -->
+            <div class="flex items-center justify-center space-x-2 text-slate-500 mb-10">
+                <span>Khalifa University of Science and Technology, Abu Dhabi, UAE</span>
+            </div>
+
+            <!-- Links / Badges -->
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="#"
+                    class="group relative inline-flex items-center justify-center px-6 py-3 text-base font-semibold text-white transition-all duration-200 bg-slate-900 border border-transparent rounded-full hover:bg-slate-800 hover:shadow-lg hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-900">
+                    <i data-lucide="file-text" class="w-5 h-5 mr-2 group-hover:scale-110 transition-transform"></i>
+                    Paper
+                </a>
+                <a href="https://github.com/RISys-Lab/SPARROW"
+                    class="group relative inline-flex items-center justify-center px-6 py-3 text-base font-semibold text-slate-900 transition-all duration-200 bg-white border border-slate-200 rounded-full hover:bg-slate-50 hover:shadow-lg hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-200">
+                    <i data-lucide="github" class="w-5 h-5 mr-2 group-hover:scale-110 transition-transform"></i> Code
+                </a>
+                <a href="https://huggingface.co/collections/RISys-Lab/sparrow-models-and-datasets"
+                    class="group relative inline-flex items-center justify-center px-6 py-3 text-base font-semibold text-slate-900 transition-all duration-200 bg-white border border-slate-200 rounded-full hover:bg-slate-50 hover:shadow-lg hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-200">
+                    <img src="https://huggingface.co/front/assets/huggingface_logo-noborder.svg" alt="Hugging Face"
+                        class="w-5 h-5 mr-2 group-hover:scale-110 transition-transform">
+                    Models and Datasets
+                </a>
+            </div>
+        </header>
+    </div>
+
+    <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-10">
+
+        <!-- Video Presentation Placeholder -->
+        <!-- Replace this block with your actual <video> or <iframe> tag -->
+
+        <!-- <section class="mb-20 opacity-0 animate-fade-in-up delay-100">
+            <div
+                class="relative w-full rounded-2xl overflow-hidden shadow-2xl bg-slate-900 aspect-[16/9] flex flex-col items-center justify-center group cursor-pointer border-4 border-white">
+                <div
+                    class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2000&auto=format&fit=crop')] bg-cover bg-center opacity-40 group-hover:opacity-30 transition-opacity duration-500">
+                </div>
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent"></div>
+                <div class="relative z-10 flex flex-col items-center justify-center">
+                    <div
+                        class="w-24 h-24 bg-blue-600/90 backdrop-blur-sm rounded-full flex items-center justify-center text-white shadow-[0_0_30px_rgba(37,99,235,0.5)] mb-6 group-hover:scale-110 group-hover:bg-blue-500 transition-all duration-300 animate-pulse-slow">
+                        <i data-lucide="play" class="w-12 h-12 ml-1 fill-white"></i>
+                    </div>
+                    <h3 class="text-white font-bold text-2xl tracking-wide drop-shadow-md">Watch the 5-Minute Overview
+                    </h3>
+                    <p class="text-slate-300 text-sm mt-2 font-medium">Embed your YouTube video or MP4 here</p>
+                </div>
+            </div>
+        </section> -->
+
+        <!-- Abstract -->
+        <section class="mb-24 opacity-0 animate-fade-in-up delay-200">
+            <div class="glass-card rounded-3xl p-8 sm:p-10 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-2 h-full bg-gradient-to-b from-blue-500 to-indigo-600"></div>
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="p-2 bg-blue-100 rounded-lg text-blue-600">
+                        <i data-lucide="book-open" class="w-6 h-6"></i>
+                    </div>
+                    <h2 class="text-3xl font-bold text-slate-900 tracking-tight">Abstract</h2>
+                </div>
+                <p class="text-slate-700 leading-relaxed text-justify-custom text-lg">
+                    Multimodal large language models (MLLMs) have advanced from image-level reasoning to pixel-level
+                    grounding, but extending these capabilities to videos remains challenging as models must achieve
+                    spatial precision and temporally consistent reference tracking. Existing video MLLMs often rely on a
+                    static segmentation token (<code>[SEG]</code>) for frame-wise grounding, which provides semantics
+                    but lacks temporal context, causing spatial drift, identity switches, and unstable initialization
+                    when objects move or reappear. We introduce <strong
+                        class="text-slate-900 font-bold">SPARROW</strong>, a pixel-grounded video MLLM that unifies
+                    spatial accuracy and temporal stability through two key components: (i) Target-Specific Tracked
+                    Features (TSF), which inject temporally aligned referent cues during training, and (ii) a
+                    dual-prompt design that decodes box ([BOX]) and segmentation ([SEG]) tokens to fuse geometric priors
+                    with semantic grounding. SPARROW is supported by a curated referential video dataset of <strong
+                        class="text-blue-600 bg-blue-50 px-2 py-0.5 rounded whitespace-nowrap">30,646 videos</strong>
+                    and
+                    <strong class="text-blue-600 bg-blue-50 px-2 py-0.5 rounded whitespace-nowrap">45,231 Q&A
+                        pairs</strong>
+                    and operates end-to-end without external detectors via a class-agnostic
+                    SAM2-based proposer. Integrated into three recent open-source video MLLMs (UniPixel, GLUS, and
+                    VideoGLaMM), SPARROW delivers consistent gains across six benchmarks, improving up to <strong
+                        class="text-green-600 bg-green-50 px-2 py-0.5 rounded">+8.9 J&F on RVOS</strong>, <strong
+                        class="text-green-600 bg-green-50 px-2 py-0.5 rounded">+5 mIoU on visual grounding</strong>, and
+                    <strong class="text-green-600 bg-green-50 px-2 py-0.5 rounded">+5.4 CLAIR on GCG</strong>. Code,
+                    datasets, and models are publicly available.
+                </p>
+            </div>
+        </section>
+
+        <!-- Methodology -->
+        <section class="mb-24 opacity-0 animate-fade-in-up delay-300">
+            <div class="flex items-center gap-3 mb-8">
+                <div class="p-2 bg-indigo-100 rounded-lg text-indigo-600">
+                    <i data-lucide="layers" class="w-6 h-6"></i>
+                </div>
+                <h2 class="text-3xl font-bold text-slate-900 tracking-tight">Methodology</h2>
+            </div>
+
+            <!-- Pipeline Image -->
+            <div class="w-full bg-white rounded-2xl shadow-sm border border-slate-200 p-3 mb-10 overflow-hidden group">
+                <img src="../assets/sparrow_pipeline.webp" alt="SPARROW Architecture Pipeline"
+                    class="w-full h-auto rounded-xl mb-3">
+                <p class="text-sm text-slate-600 text-justify-custom px-2 pb-1">
+                    <strong>SPARROW pipeline.</strong> Given a video and text prompt, spatial and temporal encoders feed
+                    V&rarr;L adapters and a LoRA-tuned LLM. The LLM emits <code>[BOX]</code> and <code>[SEG]</code>
+                    tokens which are projected (L&rarr;V) to condition a class-agnostic proposer and the SAM2 pixel
+                    decoder. Dashed green modules (GroundingDINO, CLDTracker, target cropping, K-means) are pre-computed
+                    offline as pseudo-supervision, used only for <em>target-specific information injection step</em>,
+                    and are removed at test time by default.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <div
+                    class="bg-white rounded-2xl p-8 border border-slate-200 shadow-sm hover:shadow-md transition-shadow duration-300">
+                    <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-6">
+                        <i data-lucide="target" class="w-6 h-6 text-blue-600"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">Target-Specific Tracked Features</h3>
+                    <p class="text-slate-600 leading-relaxed">
+                        To enforce temporal referential consistency, we introduce a TSF mechanism that tracks object
+                        instances across frames and provides temporally aligned features during training. This allows
+                        the model to maintain identity and spatial coherence over time, enabling stable temporal
+                        representation learning directly from tracked visual signals, without requiring an external
+                        tracker at inference.
+                    </p>
+                </div>
+
+                <div
+                    class="bg-white rounded-2xl p-8 border border-slate-200 shadow-sm hover:shadow-md transition-shadow duration-300">
+                    <div class="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center mb-6">
+                        <i data-lucide="pipette" class="w-6 h-6 text-indigo-600"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">Dual-Prompt Initialization</h3>
+                    <p class="text-slate-600 leading-relaxed">
+                        We integrate <code>[BOX]</code> and <code>[SEG]</code> tokens during training and inference to
+                        stabilize geometric and semantic grounding. The <code>[BOX]</code> token provides a coarse
+                        spatial prior by conditioning a lightweight regression head on class-agnostic region proposals.
+                        The <code>[SEG]</code> token refines these regions through language-conditioned semantics to
+                        produce precise masks.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Dataset Banner (Full Width) -->
+    <section class="w-full bg-slate-900 py-20 my-24 relative overflow-hidden">
+        <div
+            class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=2000&auto=format&fit=crop')] bg-cover bg-center opacity-10 mix-blend-overlay">
+        </div>
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-white mb-4">Curated TSF Dataset</h2>
+                <p class="text-slate-300 max-w-2xl mx-auto text-lg">
+                    To support TSF supervision, we constructed a new large-scale dataset tailored for referential video
+                    understanding and fine-grained segmentation, harmonizing 7 diverse sources.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                <div
+                    class="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 transform hover:-translate-y-1 transition-transform duration-300">
+                    <i data-lucide="film" class="w-8 h-8 text-blue-400 mx-auto mb-3"></i>
+                    <div class="text-4xl font-extrabold text-white mb-1 tracking-tight">30k+</div>
+                    <div class="text-sm text-slate-300 font-medium uppercase tracking-wider">Video Sequences</div>
+                </div>
+                <div
+                    class="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 transform hover:-translate-y-1 transition-transform duration-300">
+                    <i data-lucide="message-square" class="w-8 h-8 text-indigo-400 mx-auto mb-3"></i>
+                    <div class="text-4xl font-extrabold text-white mb-1 tracking-tight">45k+</div>
+                    <div class="text-sm text-slate-300 font-medium uppercase tracking-wider">Q&A Pairs</div>
+                </div>
+                <div
+                    class="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 transform hover:-translate-y-1 transition-transform duration-300">
+                    <i data-lucide="database" class="w-8 h-8 text-purple-400 mx-auto mb-3"></i>
+                    <div class="text-4xl font-extrabold text-white mb-1 tracking-tight">7</div>
+                    <div class="text-sm text-slate-300 font-medium uppercase tracking-wider">Source Datasets</div>
+                </div>
+                <div
+                    class="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 transform hover:-translate-y-1 transition-transform duration-300">
+                    <i data-lucide="shapes" class="w-8 h-8 text-pink-400 mx-auto mb-3"></i>
+                    <div class="text-4xl font-extrabold text-white mb-1 tracking-tight">Dense</div>
+                    <div class="text-sm text-slate-300 font-medium uppercase tracking-wider">Masks & Tracks</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Results / Qualitative Examples -->
+        <section class="mb-24">
+            <div class="flex items-center gap-3 mb-8">
+                <div class="p-2 bg-emerald-100 rounded-lg text-emerald-600">
+                    <i data-lucide="sparkles" class="w-6 h-6"></i>
+                </div>
+                <h2 class="text-3xl font-bold text-slate-900 tracking-tight">Qualitative Results</h2>
+            </div>
+            <p class="text-slate-600 mb-10 text-lg">SPARROW consistently improves spatial precision and preserves object
+                identities across challenging conditions like occlusion, scale variation, and multi-object interactions.
+                Below are qualitative comparisons with existing methods.</p>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Result 1 -->
+                <div
+                    class="group rounded-2xl overflow-hidden border border-slate-200 shadow-sm bg-white hover:shadow-xl transition-all duration-300">
+                    <div
+                        class="w-full aspect-[4/3] bg-slate-100 relative overflow-hidden flex flex-col items-center justify-center">
+                        <i data-lucide="image"
+                            class="w-12 h-12 text-slate-300 mb-2 transition-transform duration-500 group-hover:scale-110"></i>
+                        <span class="text-slate-400 font-medium">RVOS Comparison (Fig. 4)</span>
+                    </div>
+                    <div class="p-6">
+                        <h4 class="font-bold text-slate-900 text-lg mb-2">Robust Tracking in RVOS</h4>
+                        <p class="text-slate-600">
+                            SPARROW cleanly separates closely interacting objects and maintains consistent masks over
+                            time compared to baselines, even when identical instances occlude each other.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Result 2 -->
+                <div
+                    class="group rounded-2xl overflow-hidden border border-slate-200 shadow-sm bg-white hover:shadow-xl transition-all duration-300">
+                    <div
+                        class="w-full aspect-[4/3] bg-slate-100 relative overflow-hidden flex flex-col items-center justify-center">
+                        <i data-lucide="image"
+                            class="w-12 h-12 text-slate-300 mb-2 transition-transform duration-500 group-hover:scale-110"></i>
+                        <span class="text-slate-400 font-medium">GCG Comparison (Fig. 6)</span>
+                    </div>
+                    <div class="p-6">
+                        <h4 class="font-bold text-slate-900 text-lg mb-2">Detailed Conversation Generation</h4>
+                        <p class="text-slate-600">
+                            SPARROW produces more detailed and semantically consistent descriptions paired with
+                            accurate, instance-specific pixel-level grounding in complex multi-step actions.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Citation -->
+        <section class="mb-20">
+            <h2 class="text-2xl font-bold text-slate-900 mb-6">Citation</h2>
+            <div class="relative group">
+                <button onclick="copyBibtex()"
+                    class="absolute top-4 right-4 p-2.5 rounded-lg bg-slate-800 text-slate-300 hover:bg-blue-600 hover:text-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-900"
+                    title="Copy to clipboard">
+                    <i data-lucide="copy" class="w-4 h-4"></i>
+                </button>
+                <pre class="code-block p-6 rounded-2xl overflow-x-auto text-sm leading-relaxed border border-slate-800 shadow-2xl"
+                    id="bibtex">
+@inproceedings{alansari2026sparrow,
+    title={SPARROW: Learning Spatial Precision and Temporal Referential Consistency in Pixel-Grounded Video MLLMS},
+    author={Alansari, Mohamad and Suryanto, Naufal and Velayudhan, Divya and Javed, Sajid and Werghi, Naoufel and Naseer, Muzammal},
+    booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+    year={2026}
+}</pre>
+            </div>
+            <div id="copy-toast" class="hidden text-emerald-600 text-sm font-semibold mt-3 flex items-center">
+                <i data-lucide="check-circle-2" class="w-4 h-4 mr-1"></i> Copied to clipboard!
+            </div>
+        </section>
+
+        <!-- Acknowledgements -->
+        <section class="pb-10">
+            <h2 class="text-xl font-bold text-slate-900 mb-4">Acknowledgements</h2>
+            <div class="bg-slate-50 border border-slate-200 rounded-xl p-6">
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    This research was funded by Khalifa University of Science and Technology through the Faculty
+                    Start-Ups under Project ID: KU-INT-FSU-2005-8474000775.
+                </p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="py-10 border-t border-slate-200 bg-white text-center">
+        <p class="text-slate-500 font-medium">&copy; 2026 Khalifa University. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Initialize Lucide icons
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
+
+        // Copy to clipboard functionality for BibTeX
+        function copyBibtex() {
+            const bibtexText = document.getElementById('bibtex').innerText;
+            const textArea = document.createElement("textarea");
+            textArea.value = bibtexText;
+            document.body.appendChild(textArea);
+            textArea.select();
+
+            try {
+                document.execCommand('copy');
+                const toast = document.getElementById('copy-toast');
+                toast.classList.remove('hidden');
+                setTimeout(() => {
+                    toast.classList.add('hidden');
+                }, 2000);
+            } catch (err) {
+                console.error('Failed to copy text', err);
+            }
+            document.body.removeChild(textArea);
+        }
+    </script>
+</body>
+
+</html>
