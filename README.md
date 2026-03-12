@@ -81,7 +81,7 @@ TODO
 
 
 ## Stage 1: Detection Pretraining
-Please refer to README_STAGE1.md
+Please refer to [README_STAGE1.md](./README_STAGE1.md)
 
 
 
