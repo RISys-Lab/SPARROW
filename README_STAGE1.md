@@ -1,4 +1,4 @@
-This training largely follows [Groma](https://github.com/FoundationVision/Groma) and [GLEE](https://github.com/FoundationVision/GLEE/blob/main/assets/DATA.md).
+This training setup largely follows [Groma](https://github.com/FoundationVision/Groma) and [GLEE](https://github.com/FoundationVision/GLEE/blob/main/assets/DATA.md).
 
 ## Required Checkpoints
 Provide a SAM2 checkpoint for training and store it under `checkpoints` directory:
