@@ -1,11 +1,12 @@
 # SPARROW: Learning Spatial Precision and Temporal Referential Consistency in Pixel-Grounded Video MLLMs
 
-<p align="center">
+<!-- <p align="center">
     <a href="https://arxiv.org/abs/2404.13013"><img src="https://img.shields.io/badge/Paper-arXiv-B31B1B.svg"></a>
     <a href="https://huggingface.co/RISys-Lab"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-RISys--Lab-orange"></a>
-</p>
+</p> -->
 
 <p align="center">
+  📄 <a href="#">Paper</a>&nbsp;&nbsp;|&nbsp;&nbsp;
   🌐 <a href="https://risys-lab.github.io/SPARROW">Project Page</a>&nbsp;&nbsp;|&nbsp;&nbsp;
   🤖 <a href="https://huggingface.co/RISys-Lab/sparrow-finetune">Model</a>&nbsp;&nbsp;|&nbsp;&nbsp;
   📘 <a href="https://huggingface.co/datasets/RISys-Lab/sparrow-dataset">Dataset</a>
@@ -13,11 +14,9 @@
 
 **Official repository for "SPARROW <img src='assets/sparrow.png' width="2%">: Learning Spatial Precision and Temporal Referential Consistency in Pixel-Grounded Video MLLMs" (CVPR 2026).**
 
-**Authors:** Mohamad Alansari*, Naufal Suryanto*, Divya Velayudhan, Sajid Javed, Naoufel Werghi, and Muzammal Naseer
+**Authors:** Mohamad Alansari<sup>\*</sup>, Naufal Suryanto<sup>\*</sup>, Divya Velayudhan, Sajid Javed, Naoufel Werghi, and Muzammal Naseer
 
-Khalifa University
-
-*Equal contribution
+Khalifa University, <sup>*</sup>Equal contribution
 
 ---
 
