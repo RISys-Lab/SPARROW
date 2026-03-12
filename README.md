@@ -64,8 +64,8 @@ Note: Change mmcv version to 2.1.0
 ~~~
 
 Install falsh-attention for training
-~~~
+```bash
 pip install ninja
 pip install flash-attn --no-build-isolation
-~~~
+'''
 
