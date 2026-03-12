@@ -68,3 +68,20 @@ pip install ninja
 pip install flash-attn --no-build-isolation
 '''
 
+## Model Weights
+To play with SPARROW, please download the [model weights](https://huggingface.co/RISys-Lab/sparrow-finetune) from huggingface. 
+
+We additionally provide pretrained checkpoints from intermediate training stages. 
+You can start from any point to customize training.
+
+| Training stage | Required checkpoints |
+|:--------------:|:--------------------:|
+| Detection pretraining | [SAM2-L](https://huggingface.co/RISys-Lab/sparrow-det-pretrain) |
+TODO
+
+
+## Stage 1: Detection Pretraining
+Please refer to README_STAGE1.md
+
+
+
