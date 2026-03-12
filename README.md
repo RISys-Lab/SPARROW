@@ -20,7 +20,12 @@
 </div>
 
 ## TODO
-- [ ] Release Qwen3-VL related models.
+- [ ] Release SPARROW code.
+- [ ] Release pretrained SPARROW.
+- [ ] Release per-dataset finetuned SPARROW.
+- [ ] Add dataset preparation guide.
+- [ ] Add training instructions.
+- [ ] Add inference examples.
 
 ## Contents
 - [Install](#installation)
