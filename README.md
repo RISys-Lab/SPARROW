@@ -61,7 +61,6 @@ pip install --upgrade pip
 
 [Build MMCV from source](https://mmcv.readthedocs.io/en/latest/get_started/build.html)
 Note: Change mmcv version to 2.1.0
-~~~
 
 Install falsh-attention for training
 ```bash
