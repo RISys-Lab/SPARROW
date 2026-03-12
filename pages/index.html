@@ -119,8 +119,8 @@
             <!-- Authors -->
             <div
                 class="flex flex-wrap justify-center gap-x-6 gap-y-3 text-lg font-medium text-slate-700 mb-6 max-w-4xl mx-auto">
-                <a href="#" class="hover:text-blue-600 transition-colors duration-200">Mohamad Alansari</a>
-                <a href="#" class="hover:text-blue-600 transition-colors duration-200">Naufal Suryanto</a>
+                <a href="#" class="hover:text-blue-600 transition-colors duration-200">Mohamad Alansari*</a>
+                <a href="#" class="hover:text-blue-600 transition-colors duration-200">Naufal Suryanto*</a>
                 <a href="#" class="hover:text-blue-600 transition-colors duration-200">Divya Velayudhan</a>
                 <a href="#" class="hover:text-blue-600 transition-colors duration-200">Sajid Javed</a>
                 <a href="#" class="hover:text-blue-600 transition-colors duration-200">Naoufel Werghi</a>
@@ -128,8 +128,9 @@
             </div>
 
             <!-- Affiliation -->
-            <div class="flex items-center justify-center space-x-2 text-slate-500 mb-10">
+            <div class="flex flex-col items-center justify-center space-y-2 text-slate-500 mb-10">
                 <span>Khalifa University of Science and Technology, Abu Dhabi, UAE</span>
+                <span class="text-sm italic">* Equal contribution</span>
             </div>
 
             <!-- Links / Badges -->
@@ -194,21 +195,30 @@
                     static segmentation token (<code>[SEG]</code>) for frame-wise grounding, which provides semantics
                     but lacks temporal context, causing spatial drift, identity switches, and unstable initialization
                     when objects move or reappear. We introduce <strong
-                        class="text-slate-900 font-bold">SPARROW</strong>, a pixel-grounded video MLLM that unifies
+                        class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 font-extrabold text-xl align-baseline">SPARROW</strong>,
+                    a pixel-grounded video MLLM that unifies
                     spatial accuracy and temporal stability through two key components: (i) Target-Specific Tracked
                     Features (TSF), which inject temporally aligned referent cues during training, and (ii) a
-                    dual-prompt design that decodes box ([BOX]) and segmentation ([SEG]) tokens to fuse geometric priors
-                    with semantic grounding. SPARROW is supported by a curated referential video dataset of <strong
-                        class="text-blue-600 bg-blue-50 px-2 py-0.5 rounded whitespace-nowrap">30,646 videos</strong>
+                    dual-prompt design that decodes box (<code>[BOX]</code>) and segmentation (<code>[SEG]</code>)
+                    tokens to fuse geometric priors
+                    with semantic grounding. SPARROW is supported by a curated referential video dataset of <span
+                        class="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-sm font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10 whitespace-nowrap mx-0.5">30,646
+                        videos</span>
                     and
-                    <strong class="text-blue-600 bg-blue-50 px-2 py-0.5 rounded whitespace-nowrap">45,231 Q&A
-                        pairs</strong>
+                    <span
+                        class="inline-flex items-center rounded-md bg-indigo-50 px-2 py-1 text-sm font-medium text-indigo-700 ring-1 ring-inset ring-indigo-700/10 whitespace-nowrap mx-0.5">45,231
+                        Q&A
+                        pairs</span>
                     and operates end-to-end without external detectors via a class-agnostic
                     SAM2-based proposer. Integrated into three recent open-source video MLLMs (UniPixel, GLUS, and
-                    VideoGLaMM), SPARROW delivers consistent gains across six benchmarks, improving up to <strong
-                        class="text-green-600 bg-green-50 px-2 py-0.5 rounded">+8.9 J&F on RVOS</strong>, <strong
-                        class="text-green-600 bg-green-50 px-2 py-0.5 rounded">+5 mIoU on visual grounding</strong>, and
-                    <strong class="text-green-600 bg-green-50 px-2 py-0.5 rounded">+5.4 CLAIR on GCG</strong>. Code,
+                    VideoGLaMM), SPARROW delivers consistent gains across six benchmarks, improving up to <span
+                        class="inline-flex items-center rounded-md bg-emerald-50 px-2 py-1 text-sm font-medium text-emerald-700 ring-1 ring-inset ring-emerald-600/20 whitespace-nowrap mx-0.5">+8.9
+                        J&F on RVOS</span>, <span
+                        class="inline-flex items-center rounded-md bg-emerald-50 px-2 py-1 text-sm font-medium text-emerald-700 ring-1 ring-inset ring-emerald-600/20 whitespace-nowrap mx-0.5">+5
+                        mIoU on visual grounding</span>, and
+                    <span
+                        class="inline-flex items-center rounded-md bg-emerald-50 px-2 py-1 text-sm font-medium text-emerald-700 ring-1 ring-inset ring-emerald-600/20 whitespace-nowrap mx-0.5">+5.4
+                        CLAIR on GCG</span>. Code,
                     datasets, and models are publicly available.
                 </p>
             </div>
@@ -256,7 +266,7 @@
                 <div
                     class="bg-white rounded-2xl p-8 border border-slate-200 shadow-sm hover:shadow-md transition-shadow duration-300">
                     <div class="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center mb-6">
-                        <i data-lucide="pipette" class="w-6 h-6 text-indigo-600"></i>
+                        <i data-lucide="scan-line" class="w-6 h-6 text-indigo-600"></i>
                     </div>
                     <h3 class="text-xl font-bold text-slate-900 mb-3">Dual-Prompt Initialization</h3>
                     <p class="text-slate-600 leading-relaxed">
@@ -559,7 +569,7 @@
     </div>
 
     <footer class="py-10 border-t border-slate-200 bg-white text-center">
-        <p class="text-slate-500 font-medium">&copy; 2026 Khalifa University. All rights reserved.</p>
+        <p class="text-slate-500 font-medium">&copy; 2026 RISys Lab, Khalifa University. All rights reserved.</p>
     </footer>
 
     <script>
