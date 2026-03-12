@@ -1,3 +1,5 @@
+This training largely follows [Groma](https://github.com/FoundationVision/Groma) and [GLEE](https://github.com/FoundationVision/GLEE/blob/main/assets/DATA.md).
+
 ## Required Checkpoints
 Provide a SAM2 checkpoint for training and store it under `checkpoints` directory:
 - Example: `sam2_hiera_large.pt`
@@ -40,7 +42,7 @@ Expected directory layout:
 └── SA1B/
     └── images/
 ```
-
+We downloaded data from the SA1B official website, and only use [sa_000000.tar ~ sa_000050.tar] to preprocess into the required format and train the model.
 If needed, switch SA1B annotation in `sparrow/data/configs/det_pretrain.py` from the small shard to the full file.
 
 ## Training
