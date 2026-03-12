@@ -66,7 +66,7 @@ Install falsh-attention for training
 ```bash
 pip install ninja
 pip install flash-attn --no-build-isolation
-'''
+```
 
 ## Model Weights
 To play with SPARROW, please download the [model weights](https://huggingface.co/RISys-Lab/sparrow-finetune) from huggingface. 
