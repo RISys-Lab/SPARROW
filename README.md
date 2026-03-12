@@ -7,7 +7,7 @@
 > 
 ><a href="https://arxiv.org/abs/2404.13013"><img src='https://img.shields.io/badge/arXiv-SPARROW-red' alt='Paper PDF'></a>
 ><a href='https://sparrow-mllm.github.io/'><img src='https://img.shields.io/badge/Project_Page-SPARROW-green' alt='Project Page'></a>
-><a href='https://huggingface.co/FoundationVision/groma-7b-finetune'><img src='https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Model-blue'></a>
+><a href='https://huggingface.co/RISys-Lab/sparrow-finetune'><img src='https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Model-blue'></a>
 ><a href='https://huggingface.co/datasets/RISys-Lab/sparrow-dataset'><img src='https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Dataset-yellow'></a>
 
 <img src='assets/Fig1.png' align="center" width="80%">
