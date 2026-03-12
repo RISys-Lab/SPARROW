@@ -20,7 +20,7 @@
 </div>
 
 ## TODO
-- [] Release Qwen3-VL related models.
+- [ ] Release Qwen3-VL related models.
 
 ## Contents
 - [Install](#installation)
