@@ -119,9 +119,3 @@ python -m sparrow.eval.run_ddetr_sam2 \
 - Visualization outputs:
   - `det_vis/*_filter.jpg`
 
-## Troubleshooting
-- `ModuleNotFoundError: mmcv`: install compatible MMCV with `pip install -U openmim && mim install "mmcv-full==1.4.8"`.
-- CUDA requested but unavailable:
-  - Use `--device cpu` for inference.
-- Empty training data:
-  - Recheck paths in `sparrow/data/configs/det_pretrain.py`.
