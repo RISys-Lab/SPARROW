@@ -1,0 +1,291 @@
+# Adopted from https://github.com/lm-sys/FastChat. Below is the original copyright:
+# Adopted from tatsu-lab@stanford_alpaca. Below is the original copyright:
+#    Copyright 2023 Rohan Taori, Ishaan Gulrajani, Tianyi Zhang, Yann Dubois, Xuechen Li
+#
+#    Licensed under the Apache License, Version 2.0 (the "License");
+#    you may not use this file except in compliance with the License.
+#    You may obtain a copy of the License at
+#
+#        http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing, software
+#    distributed under the License is distributed on an "AS IS" BASIS,
+#    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#    See the License for the specific language governing permissions and
+#    limitations under the License.
+
+import time
+import mmcv
+
+import torch
+from torch import distributed as dist
+
+# from mmcv.runner import get_dist_info
+TORCH_VERSION = torch.__version__
+
+def digit_version(version_str):
+    """Convert a version string into a tuple of integers.
+
+    This method is usually used for comparing two versions.
+
+    Args:
+        version_str (str): The version string.
+
+    Returns:
+        tuple[int]: The version info in digits (integers).
+    """
+    digit_version = []
+    for x in version_str.split('.'):
+        if x.isdigit():
+            digit_version.append(int(x))
+        elif x.find('rc') != -1:
+            patch_version = x.split('rc')
+            digit_version.append(int(patch_version[0]) - 1)
+            digit_version.append(int(patch_version[1]))
+    return tuple(digit_version)
+
+def get_dist_info():
+    if (TORCH_VERSION != 'parrots'
+            and digit_version(TORCH_VERSION) < digit_version('1.0')):
+        initialized = dist._initialized
+    else:
+        if dist.is_available():
+            initialized = dist.is_initialized()
+        else:
+            initialized = False
+    if initialized:
+        rank = dist.get_rank()
+        world_size = dist.get_world_size()
+    else:
+        rank = 0
+        world_size = 1
+    return rank, world_size
+
+import pathlib
+import transformers
+from mmdet.apis.test import collect_results_cpu
+from mmdet.core import bbox2result
+from dataclasses import dataclass, field
+from typing import Optional, List
+from transformers import Trainer, DeformableDetrConfig
+from transformers.image_transforms import center_to_corners_format
+
+from sparrow.model.ddetr_sam2 import CustomDDETRSAM2Config, CustomDDETRSAM2Model
+from sparrow.data.build import build_multi_datasets
+from sparrow.data.collator import DataCollatorForDetDataset
+from sparrow.train.groma_trainer import GromaTrainer
+
+
+@dataclass
+class ModelArguments:
+    vis_encoder: Optional[str] = field(default=None, metadata={"help": "Path to SAM2 checkpoint file."})
+    sam2_cfg: str = field(default="sam2_hiera_l.yaml", metadata={"help": "SAM2 hydra config name."})
+    zs_weight_path: Optional[str] = field(default=None)
+    num_queries: Optional[int] = field(default=300)
+    ddetr_hidden_dim: Optional[int] = field(default=256)
+    num_encoder_layers: Optional[int] = field(default=6)
+    num_decoder_layers: Optional[int] = field(default=6)
+    num_feature_levels: Optional[int] = field(default=1)
+    two_stage: Optional[bool] = field(default=True)
+    with_box_refine: Optional[bool] = field(default=True)
+    num_classes: Optional[int] = field(default=80)
+    auxiliary_loss: Optional[bool] = field(default=True)
+    match_class_cost: Optional[int] = field(default=2)
+    match_bbox_cost: Optional[int] = field(default=5)
+    match_giou_cost: Optional[int] = field(default=2)
+    cls_loss_coefficient: Optional[int] = field(default=2)
+    bbox_loss_coefficient: Optional[int] = field(default=5)
+    giou_loss_coefficient: Optional[int] = field(default=2)
+    focal_alpha: Optional[float] = field(default=0.25)
+
+
+@dataclass
+class DataArguments:
+    dataset_config: str = field(default='groma/datasets/dataset_configs.py')
+
+
+@dataclass
+class TrainingArguments(transformers.TrainingArguments):
+    freeze_vis_encoder: Optional[bool] = field(default=True)
+    freeze_ddetr: Optional[bool] = field(default=False)
+    optim: str = field(default="adamw_torch")
+    remove_unused_columns: bool = field(default=False)
+    lr_backbone_names: Optional[tuple] = field(default=("vis_encoder",))
+    lr_linear_proj_names: Optional[tuple] = field(default=('reference_points', 'sampling_offsets'))
+    lr_multiplier: Optional[float] = field(default=0.1)
+    group_by_data_source: Optional[bool] = field(default=True)
+    equalize_data_sources: Optional[bool] = field(default=False)
+    samples_per_dataset: Optional[int] = field(default=0)
+
+
+def safe_save_model_for_hf_trainer(trainer: transformers.Trainer, output_dir: str):
+    """Collects the state dict and dumps to disk."""
+    state_dict = trainer.model.state_dict()
+    if trainer.args.should_save:
+        cpu_state_dict = {
+            key: value.cpu()
+            for key, value in state_dict.items()
+        }
+        del state_dict
+        trainer._save(output_dir, state_dict=cpu_state_dict)  # noqa
+
+
+def match_name_keywords(n, name_keywords):
+    out = False
+    for b in name_keywords:
+        if b in n:
+            out = True
+            break
+    return out
+
+
+def post_process(outputs, target_sizes, threshold=0.0, top_k=100):
+    out_logits, out_bbox = outputs.logits['coco'], outputs.pred_boxes
+    if target_sizes is not None:
+        if len(out_logits) != len(target_sizes):
+            raise ValueError(
+                "Make sure that you pass in as many target sizes as the batch dimension of the logits"
+            )
+
+    prob = out_logits.sigmoid()
+    prob = prob.view(out_logits.shape[0], -1)
+    k_value = min(top_k, prob.size(1))
+    topk_values, topk_indexes = torch.topk(prob, k_value, dim=1)
+    scores = topk_values
+    topk_boxes = torch.div(topk_indexes, out_logits.shape[2], rounding_mode="floor")
+    labels = topk_indexes % out_logits.shape[2]
+    boxes = center_to_corners_format(out_bbox)
+    boxes = torch.gather(boxes, 1, topk_boxes.unsqueeze(-1).repeat(1, 1, 4))
+
+    if isinstance(target_sizes, List):
+        img_h = torch.Tensor([i[0] for i in target_sizes])
+        img_w = torch.Tensor([i[1] for i in target_sizes])
+    else:
+        img_h, img_w = target_sizes.unbind(1)
+    scale_fct = torch.stack([img_w, img_h, img_w, img_h], dim=1).to(boxes.device)
+    boxes = boxes * scale_fct[:, None, :]
+
+    results = []
+    for s, l, b in zip(scores, labels, boxes):
+        score = s[s > threshold]
+        label = l[s > threshold]
+        box = b[s > threshold]
+        results.append({"scores": score, "labels": label, "boxes": box})
+
+    return results
+
+
+def eval(model, test_dataloader, num_classes):
+    model.eval()
+    results = []
+    dataset = test_dataloader.dataset
+    rank, world_size = get_dist_info()
+    if rank == 0:
+        prog_bar = mmcv.ProgressBar(len(dataset))
+    time.sleep(2)
+    for data in test_dataloader:
+        with torch.no_grad():
+            target_size = data['ori_shapes'].to('cuda')
+            result = model(images=data['images'].to('cuda'))
+            result = post_process(result, target_size)
+            result = [(torch.cat((x['boxes'], x['scores'].unsqueeze(1)), dim=1), x['labels']) for x in result]
+            result = [bbox2result(det_bboxes, det_labels, num_classes) for det_bboxes, det_labels in result]
+
+        results.extend(result)
+        if rank == 0:
+            batch_size = len(result)
+            for _ in range(batch_size * world_size):
+                prog_bar.update()
+
+    results = collect_results_cpu(results, len(dataset), None)
+    if rank == 0:
+        dataset.evaluate(results)
+
+
+def train():
+    parser = transformers.HfArgumentParser((ModelArguments, DataArguments, TrainingArguments))
+    model_args, data_args, training_args = parser.parse_args_into_dataclasses()
+
+    ddetr_cfg = DeformableDetrConfig(
+        d_model=model_args.ddetr_hidden_dim,
+        encoder_layers=model_args.num_encoder_layers,
+        decoder_layers=model_args.num_decoder_layers,
+        num_feature_levels=model_args.num_feature_levels,
+        two_stage=model_args.two_stage,
+        two_stage_num_proposals=model_args.num_queries,
+        num_queries=model_args.num_queries,
+        num_labels=model_args.num_classes,
+        auxiliary_loss=model_args.auxiliary_loss,
+        with_box_refine=model_args.with_box_refine,
+        class_cost=model_args.match_class_cost,
+        bbox_cost=model_args.match_bbox_cost,
+        giou_cost=model_args.match_giou_cost,
+        cls_loss_coefficient=model_args.cls_loss_coefficient,
+        bbox_loss_coefficient=model_args.bbox_loss_coefficient,
+        giou_loss_coefficient=model_args.giou_loss_coefficient,
+        focal_alpha=model_args.focal_alpha,
+    )
+    model_cfg = CustomDDETRSAM2Config(
+        sam2_cfg=model_args.sam2_cfg,
+        zs_weight_path=model_args.zs_weight_path,
+        ddetr_cfg=ddetr_cfg,
+    )
+    model = CustomDDETRSAM2Model(model_cfg, pretrained_vis_encoder=model_args.vis_encoder)
+
+    if training_args.freeze_vis_encoder:
+        model.freeze_vis_encoder()
+    if training_args.freeze_ddetr:
+        model.freeze_ddetr()
+
+    param_dicts = [
+        {
+            "params": [
+                p
+                for n, p in model.named_parameters()
+                if not match_name_keywords(n, training_args.lr_backbone_names)
+                and not match_name_keywords(n, training_args.lr_linear_proj_names)
+                and p.requires_grad
+            ],
+            "lr": training_args.learning_rate,
+        },
+        {
+            "params": [
+                p
+                for n, p in model.named_parameters()
+                if match_name_keywords(n, training_args.lr_backbone_names) and p.requires_grad
+            ],
+            "lr": training_args.learning_rate * training_args.lr_multiplier,
+        },
+        {
+            "params": [
+                p
+                for n, p in model.named_parameters()
+                if match_name_keywords(n, training_args.lr_linear_proj_names) and p.requires_grad
+            ],
+            "lr": training_args.learning_rate * training_args.lr_multiplier,
+        },
+    ]
+    optimizer = torch.optim.AdamW(param_dicts, lr=training_args.learning_rate, weight_decay=training_args.weight_decay)
+
+    train_dataset = build_multi_datasets(data_args.dataset_config)
+    data_collator = DataCollatorForDetDataset()
+
+    trainer = GromaTrainer(
+        model=model,
+        args=training_args,
+        train_dataset=train_dataset,
+        data_collator=data_collator,
+        optimizers=(optimizer, None),
+    )
+
+    if list(pathlib.Path(training_args.output_dir).glob("checkpoint-*")):
+        trainer.train(resume_from_checkpoint=True)
+    else:
+        trainer.train()
+
+    trainer.save_state()
+    safe_save_model_for_hf_trainer(trainer=trainer, output_dir=training_args.output_dir)
+
+
+if __name__ == "__main__":
+    train()
