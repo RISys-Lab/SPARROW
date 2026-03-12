@@ -1,7 +1,7 @@
 <div align="center">
-<h1> SPARROW<img src='assets/sparrow.png' align="center" width="10%">: Learning Spatial Precision and Temporal Referential Consistency in Pixel-Grounded Video MLLMs (CVPR 2026) </h1>
+<h1> SPARROW<img src='assets/sparrow.png' align="center" width="5%">: Learning Spatial Precision and Temporal Referential Consistency in Pixel-Grounded Video MLLMs (CVPR 2026) </h1>
 
-> [**SPARROW ARXIV**](https://arxiv.org/abs/2404.13013)
+> [**SPARROW**](https://arxiv.org/abs/2404.13013)
 > **Mohamad Alansari, Naufal Suryanto, Divya Velayudhan, Sajid Javed, Naoufel Werghi, and Muzammal Naseer**
 ><a href="https://arxiv.org/abs/2404.13013"><img src='https://img.shields.io/badge/arXiv-SPARROW-red' alt='Paper PDF'></a>
 ><a href='https://sparrow-mllm.github.io/'><img src='https://img.shields.io/badge/Project_Page-SPARROW-green' alt='Project Page'></a>
@@ -16,4 +16,5 @@
     (d) The Dual-Prompt Initialization strategy improves segmentation precision and stability during early frames.
 </p>
 </div>
+
 
