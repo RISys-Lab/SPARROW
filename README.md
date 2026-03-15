@@ -170,7 +170,7 @@ Download the checkpoints from the following sources:
 
 ---
 
-##  Quick Run
+## ⚡ Quick Run
 
 After setting up the environment and downloading the checkpoints, you can run inference on **either an image or a video**.
 
