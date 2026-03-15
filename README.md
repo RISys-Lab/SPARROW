@@ -241,8 +241,8 @@ SPARROW achieves state-of-the-art and consistently improves performance across t
 
 [Download Here](https://huggingface.co/RISys-Lab/sparrow-finetune-davis17) Ref-DAVIS17:
 ```bash
-python eval_referdavis_infer.py
-python eval_referdavis_metrics.py
+python eval/eval_referdavis_infer.py
+python eval/eval_referdavis_metrics.py
 ```
 
 ---
