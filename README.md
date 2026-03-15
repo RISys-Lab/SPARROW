@@ -25,6 +25,7 @@ Khalifa University, <sup>*</sup>Equal contribution
 - [Introduction](#-introduction)
 - [Model Lineup](#-model-lineup)
 - [Getting Started](#-getting-started)
+- [Quick Run](#-quick-run)
 - [Training](#-training)
 - [Evaluation](#-evaluation)
 - [Citation](#-citation)
@@ -166,6 +167,58 @@ Download the checkpoints from the following sources:
 * SPARROW detection pretrain checkpoint: [Download Here](https://huggingface.co/RISys-Lab/sparrow-det-pretrain). Choose any checkpoint from this repository, rename it to ddetr_sam2, and place it under: `checkpoints_hf/ddetr_sam2/`
 
 * VideoGPT-plus Phi3-mini-4k checkpoint: [Download Here](https://huggingface.co/MBZUAI/VideoGPT-plus_Phi3-mini-4k). Place the folder at: `checkpoints_hf/MBZUAI/VideoGPT-plus_Phi3-mini-4k/`
+
+---
+
+##  Quick Run
+
+After setting up the environment and downloading the checkpoints, you can run inference on **either an image or a video**.
+
+```bash
+python chat.py \
+  --llava_version_or_path checkpoints/sparrow-finetune \
+  --input_path /path/to/input.mp4 \
+  --prompt_text "Please segment the ....." \
+  --vis_save_path vis_output/chat_output \
+  --proposal_debug_modes both
+```
+
+Arguments:
+
+* --llava_version_or_path
+Path to the SPARROW checkpoint.
+
+* --input_path
+Path to the input image or video.
+
+* --prompt_text
+Text prompt describing what object or region to segment.
+
+* --vis_save_path
+Directory where visualization outputs will be saved.
+
+* --proposal_debug_modes
+Debug visualization mode (both, proposal, or none).
+
+Example (Video):
+```bash
+python chat.py \
+  --llava_version_or_path checkpoints/sparrow-finetune \
+  --input_path assets/example_video.mp4 \
+  --prompt_text "Please segment the horse jumping." \
+  --vis_save_path vis_output/chat_output \
+  --proposal_debug_modes both
+```
+
+Example (Image):
+```bash
+python chat.py \
+  --llava_version_or_path checkpoints/sparrow-finetune \
+  --input_path assets/example_image.jpg \
+  --prompt_text "Please segment the person." \
+  --vis_save_path vis_output/chat_output \
+  --proposal_debug_modes both
+```
 
 ---
 
