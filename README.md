@@ -128,6 +128,44 @@ pip install ninja
 pip install flash-attn --no-build-isolation
 ```
 
+### 📥 Checkpoints
+
+Download the required checkpoints before running the project. Store the checkpoints in the following locations:
+- Put most project checkpoints under `checkpoints/`
+- Put the Hugging Face checkpoints below under `checkpoints_hf/`
+- Store **InternVideo2** in the base repository under `OpenGVLab/InternVideo2-Stage2_1B-224p-f4/`
+Expected directory structure:
+```bash
+SPARROW/
+├── checkpoints/
+│   ├── sam2_hiera_large.pt
+│   ├── VideoGLaMM/
+│   └── sparrow-finetune/
+├── checkpoints_hf/
+│   ├── ddetr_sam2/
+│   └── MBZUAI/
+│       └── VideoGPT-plus_Phi3-mini-4k/
+│           ├── mvbench/
+│           └── vcgbench/
+├── OpenGVLab/
+│   └── InternVideo2-Stage2_1B-224p-f4/
+└── ...
+```
+Download the checkpoints from the following sources:
+
+* SAM2 checkpoints: [Download Here](https://dl.fbaipublicfiles.com/segment_anything_2/072824/sam2_hiera_large.pt). Place the file at:
+`checkpoints/sam2_hiera_large.pt`
+
+* InternVideo2 checkpoint: [Download Here](https://huggingface.co/OpenGVLab/InternVideo2-Stage2_1B-224p-f4). Place the folder at: `OpenGVLab/InternVideo2-Stage2_1B-224p-f4/`
+
+* VideoGLaMM checkpoint: [Download Here](https://mbzuaiac-my.sharepoint.com/:f:/g/personal/shehan_munasinghe_mbzuai_ac_ae/Etucj3LuqdRDocrle_8eJbcB8C11u-020AX7fwIYWJh-dg?e=uPanYM). Place the contents under: `checkpoints/VideoGPTPlus-Phi3-SAM2-8frame-tunevlproj-epoch29/`
+
+* SPARROW checkpoint: [Download Here](https://huggingface.co/RISys-Lab/sparrow-finetune). Place the folder at: `checkpoints/sparrow-finetune/`
+
+* SPARROW detection pretrain checkpoint: [Download Here](https://huggingface.co/RISys-Lab/sparrow-det-pretrain). Choose any checkpoint from this repository, rename it to ddetr_sam2, and place it under: `checkpoints_hf/ddetr_sam2/`
+
+* VideoGPT-plus Phi3-mini-4k checkpoint: [Download Here](https://huggingface.co/MBZUAI/VideoGPT-plus_Phi3-mini-4k). Place the folder at: `checkpoints_hf/MBZUAI/VideoGPT-plus_Phi3-mini-4k/`
+
 ---
 
 ## 🛠️ Training
