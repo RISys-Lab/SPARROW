@@ -134,6 +134,7 @@ Download the required checkpoints before running the project. Store the checkpoi
 - Put most project checkpoints under `checkpoints/`
 - Put the Hugging Face checkpoints below under `checkpoints_hf/`
 - Store **InternVideo2** in the base repository under `OpenGVLab/InternVideo2-Stage2_1B-224p-f4/`
+
 Expected directory structure:
 ```bash
 SPARROW/
