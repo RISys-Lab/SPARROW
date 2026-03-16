@@ -1,12 +1,12 @@
 # SPARROW: Learning Spatial Precision and Temporal Referential Consistency in Pixel-Grounded Video MLLMs
 
 <!-- <p align="center">
-    <a href="https://arxiv.org/abs/2404.13013"><img src="https://img.shields.io/badge/Paper-arXiv-B31B1B.svg"></a>
+    <a href="https://arxiv.org/abs/2603.12382"><img src="https://img.shields.io/badge/Paper-arXiv-B31B1B.svg"></a>
     <a href="https://huggingface.co/RISys-Lab"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-RISys--Lab-orange"></a>
 </p> -->
 
 <p align="center">
-  📄 <a href="#">Paper</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+  📄 <a href="https://arxiv.org/abs/2603.12382">Paper</a>&nbsp;&nbsp;|&nbsp;&nbsp;
   🌐 <a href="https://risys-lab.github.io/SPARROW">Project Page</a>&nbsp;&nbsp;|&nbsp;&nbsp;
   🤖 <a href="https://huggingface.co/RISys-Lab/sparrow-finetune">Model</a>&nbsp;&nbsp;|&nbsp;&nbsp;
   📘 <a href="https://huggingface.co/datasets/RISys-Lab/sparrow-dataset">Dataset</a>
