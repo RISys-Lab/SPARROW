@@ -2,9 +2,9 @@
 name: Deploy static content to Pages
 
 on:
-  # Runs on pushes targeting the default branch
-  push:
-    branches: ["pages"]
+  # Runs on pull requests targeting the main branch
+  pull_request:
+    branches: ["main"]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -24,6 +24,7 @@ concurrency:
 jobs:
   # Single deploy job since we're just deploying
   deploy:
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.ref == 'pages'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
