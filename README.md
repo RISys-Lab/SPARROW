@@ -26,7 +26,7 @@ Khalifa University, <sup>*</sup>Equal contribution
 - [Model Lineup](#-model-lineup)
 - [Getting Started](#-getting-started)
 - [Quick Run](#-quick-run)
-- [Training](#-training)
+- [Training](#training)
 - [Evaluation](#-evaluation)
 - [Citation](#-citation)
 
@@ -222,6 +222,7 @@ python chat.py \
 
 ---
 
+<a id="training"></a>
 ## 🛠️ Training
 
 ### Stage 1: Detection Pretraining
