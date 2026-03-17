@@ -42,7 +42,7 @@ Stage 1 trains the TSF-focused adapter/LoRA components while keeping detection g
 Training script:
 
 ```bash
-train_stage1_tsf.py
+train/train_stage1_tsf.py
 ```
 
 ### Stage 2: Proposal Filter Refinement
@@ -52,7 +52,7 @@ Stage 2 refines the model with proposal filtering and detection guidance enabled
 Training script:
 
 ```bash
-train_stage2_filter.py
+train/train_stage2_filter.py
 ```
 
 ---
@@ -77,6 +77,21 @@ Additional dataset-related arguments used by the training scripts:
   Default: `255`
 
 These paths are consumed by `util/dataset.py` to resolve dataset locations for training.
+
+
+### Dataset Download
+
+All dataset download, preparation, and extraction instructions are documented in:
+
+👉 **[Dataset.md](./Dataset.md)**
+
+This includes:
+- VideoGLaMM datasets
+- Sa2VA-Training datasets
+- Required directory structure
+- Extraction and organization steps
+
+Make sure your dataset layout matches the structure described there before starting training.
 
 
 ### Supported dataset groups
@@ -383,7 +398,7 @@ Run all commands from the repository root.
 ### Stage 1
 
 ```bash
-deepspeed train_stage1_tsf.py \
+deepspeed train/train_stage1_tsf.py \
   --exp_name stage1_tsf \
   --dataset_dir datasets/image \
   --video_dataset_dir datasets/video \
@@ -394,7 +409,7 @@ deepspeed train_stage1_tsf.py \
 ### Stage 2
 
 ```bash
-deepspeed train_stage2_filter.py \
+deepspeed train/train_stage2_filter.py \
   --exp_name stage2_filter \
   --dataset_dir datasets/image \
   --video_dataset_dir datasets/video \
@@ -477,8 +492,8 @@ Instead:
 
 After training, you can export merged Hugging Face model weights using:
 
-- `save_hf_weights_stage1.py`
-- `save_hf_weights_stage2.py`
+- `train/save_hf_weights_stage1.py`
+- `train/save_hf_weights_stage2.py`
 
 ### Required arguments
 
@@ -491,7 +506,7 @@ Both scripts require:
 ### Stage 1 export
 
 ```bash
-python save_hf_weights_stage1.py \
+python train/save_hf_weights_stage1.py \
   --save_hf_model True \
   --intermediate_weight /path/to/model_state_dict.pt \
   --hf_save_path hf_model/stage1
@@ -500,7 +515,7 @@ python save_hf_weights_stage1.py \
 ### Stage 2 export
 
 ```bash
-python save_hf_weights_stage2.py \
+python train/save_hf_weights_stage2.py \
   --save_hf_model True \
   --intermediate_weight /path/to/model_state_dict.pt \
   --hf_save_path hf_model/stage2
