@@ -230,7 +230,6 @@ python chat.py \
 
 For detailed instructions on setting up and running the initial detection pretraining phase, please refer to **[`README_STAGE1.md`](./README_STAGE1.md)**.
 
-*(Further training instructions and stages will be released soon)*
 
 ### Stage 2 and 3: Full Model Training
 
