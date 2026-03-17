@@ -82,6 +82,7 @@ To play with SPARROW, please download the model weights from Hugging Face. We ad
 | :--- | :--- | :--- |
 | **Detection pretraining** | SAM2-L | [🤗 Link](https://huggingface.co/RISys-Lab/sparrow-det-pretrain) |
 | **Finetuned Models** | SPARROW | [🤗 Link](https://huggingface.co/RISys-Lab/sparrow-finetune) |
+| **Refer-DAVIS17** | SPARROW | [🤗 Link](https://huggingface.co/RISys-Lab/sparrow-finetune-davis17) |
 
 *(More checkpoints to be added soon)*
 
