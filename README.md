@@ -232,6 +232,10 @@ For detailed instructions on setting up and running the initial detection pretra
 
 *(Further training instructions and stages will be released soon)*
 
+### Stage 2 and 3: Full Model Training
+
+For detailed instructions on ```Stage 1: Target-Specific Information Injection``` and ```Stage2: Task Adaptation: Filter-Only Fine-Tuning```, please refer to **[`README_TRAIN.md`](./README_TRAIN.md)**.
+
 ---
 
 ## 🧪 Evaluation
