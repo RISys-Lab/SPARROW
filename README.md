@@ -42,16 +42,17 @@ We are releasing SPARROW code, models, and datasets. Track our progress here:
   <summary><b>View checklist</b></summary>
 
 #### 1) Code & Inference
-- [ ] Release SPARROW code.
-- [ ] Add inference examples.
+- [x] Release SPARROW code.
+- [x] Add inference examples.
+- [ ] Add MeViS and Ref-YTVOS inference examples.
 
 #### 2) Models
-- [ ] Release pretrained SPARROW.
+- [x] Release pretrained SPARROW.
 - [ ] Release per-dataset finetuned SPARROW.
 
 #### 3) Data & Training
-- [ ] Add dataset preparation guide.
-- [ ] Add training instructions.
+- [x] Add dataset preparation guide.
+- [x] Add training instructions.
 
 </details>
 
